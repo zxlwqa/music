@@ -1,0 +1,41 @@
+{
+  "name": "音乐播放器",
+  "short_name": "Music",
+  "description": "简约音乐播放器",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#151518",
+  "theme_color": "#646cff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["music", "entertainment"],
+  "screenshots": [
+    {
+      "src": "/music.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ],
+  "features": [
+    "在线音乐播放",
+    "歌单管理",
+    "MV播放",
+    "离线缓存"
+  ]
+}

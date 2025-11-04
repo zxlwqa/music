@@ -1,0 +1,89 @@
+name: 上传音乐到云盘
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每天凌晨2点自动执行
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  compress-and-upload:
+    runs-on: ubuntu-latest
+    env:
+      WEBDAV_URL: ${{ secrets.WEBDAV_URL }}
+      WEBDAV_USER: ${{ secrets.WEBDAV_USER }}
+      WEBDAV_PASS: ${{ secrets.WEBDAV_PASS }}
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 检查音乐文件
+        id: check-music
+        run: |
+          if [ -d "public/music" ] && [ "$(find public/music -type f \( -name "*.mp3" -o -name "*.flac" -o -name "*.wav" -o -name "*.m4a" -o -name "*.ogg" -o -name "*.aac" \) | wc -l)" -gt 0 ]; then
+            echo "has_music=true" >> $GITHUB_OUTPUT
+            echo "music_count=$(find public/music -type f \( -name "*.mp3" -o -name "*.flac" -o -name "*.wav" -o -name "*.m4a" -o -name "*.ogg" -o -name "*.aac" \) | wc -l)" >> $GITHUB_OUTPUT
+          else
+            echo "has_music=false" >> $GITHUB_OUTPUT
+            echo "music_count=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 安装压缩工具
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip unzip
+
+      - name: 创建压缩包
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          # 使用固定文件名，每次覆盖
+          ARCHIVE_NAME="music.zip"
+          
+          # 创建压缩包
+          cd public/music
+          zip -r -9 "../../${ARCHIVE_NAME}" . -x "*.DS_Store" "*.Thumbs.db" "*.tmp"
+          cd ../..
+          
+          # 显示压缩包信息
+          ls -lh "${ARCHIVE_NAME}"
+          
+          echo "ARCHIVE_NAME=${ARCHIVE_NAME}" >> $GITHUB_ENV
+
+      - name: 安装WebDAV客户端
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          # 安装rclone用于WebDAV上传
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: 配置WebDAV连接
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          # 使用rclone config create命令配置
+          rclone config create webdav webdav url="${WEBDAV_URL}" vendor=other user="${WEBDAV_USER}" pass="${WEBDAV_PASS}" --non-interactive
+          
+          echo "✅ WebDAV配置完成"
+
+      - name: 上传到云盘
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          # 固定上传路径
+          UPLOAD_PATH="/music/"
+          rclone mkdir "webdav:${UPLOAD_PATH}" || echo "目录可能已存在"
+          
+          # 上传压缩包
+          rclone copy "${ARCHIVE_NAME}" "webdav:${UPLOAD_PATH}" --progress
+          
+          # 验证上传
+          rclone ls "webdav:${UPLOAD_PATH}${ARCHIVE_NAME}"
+
+      - name: 清理本地文件
+        if: steps.check-music.outputs.has_music == 'true'
+        run: |
+          rm -f "${ARCHIVE_NAME}"
