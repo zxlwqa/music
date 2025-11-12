@@ -1113,7 +1113,7 @@ footer a {
 @media (max-width: 480px) {
   .container { 
     max-width: 100%; 
-    padding: 2px 12px 20px 12px; 
+    padding: 2px 12px 12px 12px; 
     grid-template-rows: auto auto 1fr;
     gap: 0px;
   }
@@ -1227,10 +1227,6 @@ footer a {
   footer div { 
     margin-top: 0; 
     line-height: 0; 
-  }
-  .container { 
-    padding-bottom: 0; 
-    contain: layout style;
   }
   
   .settings-icon {
