@@ -85,8 +85,7 @@ select.form-input:focus { border-color: #6b7280; }
   grid-area: playlist;
   overflow: hidden;
   margin-top: 0;
-  margin-bottom: 0;
-  box-sizing: border-box;
+  margin-bottom: 8px;
 }
 
 .virtual-scroll-container {
@@ -1165,9 +1164,8 @@ footer a {
     height: calc(100vh - 300px);
     min-height: calc(100vh - 300px);
     max-height: calc(100vh - 300px);
-    margin-bottom: 0;
+    margin-bottom: 12px;
     margin-top: 0;
-    box-sizing: border-box;
   }
   .virtual-scroll-container { 
     max-height: calc(100vh - 300px); 
@@ -1230,7 +1228,7 @@ footer a {
     line-height: 0; 
   }
   .container { 
-    padding-bottom: 0; 
+    padding-bottom: 12px; 
     contain: layout style;
   }
   
