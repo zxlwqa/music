@@ -1113,7 +1113,7 @@ footer a {
 @media (max-width: 480px) {
   .container { 
     max-width: 100%; 
-    padding: 2px 12px 25px 12px; 
+    padding: 2px 12px 0 12px; 
     grid-template-rows: auto auto 1fr;
     gap: 0px;
   }
@@ -1162,10 +1162,10 @@ footer a {
   .actions-inline { gap: 10px; margin-left: 6px; }
 
   .virtual-playlist { 
-    height: calc(100% - 25px);
+    height: 100%;
     min-height: 0;
-    max-height: calc(100% - 25px);
-    margin-bottom: 0;
+    max-height: 100%;
+    margin-bottom: 20px;
     margin-top: 0;
     align-self: start;
   }
