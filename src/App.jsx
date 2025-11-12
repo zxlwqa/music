@@ -268,7 +268,7 @@ export default function App() {
       <div className="search-bar" style={{ height: '44px', minHeight: '44px' }}>
         <input className="search-input" placeholder="搜索歌曲或歌手" disabled id="search-loading" name="search-loading" aria-label="搜索歌曲或歌手（加载中）" />
       </div>
-      <div className="virtual-playlist" style={{ height: '400px', minHeight: '400px' }}>
+      <div className="virtual-playlist">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           正在加载播放列表...
         </div>
@@ -307,7 +307,7 @@ export default function App() {
         <SearchBar value={query} onChange={setQuery} />
       </Suspense>
       <Suspense fallback={
-        <div className="virtual-playlist" style={{ height: '400px', minHeight: '400px' }}>
+        <div className="virtual-playlist">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
             加载播放列表...
           </div>
