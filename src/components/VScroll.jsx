@@ -58,7 +58,6 @@ const VScroll = forwardRef(function VScroll({
       ref={containerRef}
       className={`virtual-scroll-container ${className}`}
       style={{
-        height: containerHeight,
         minHeight: '200px',
         contain: 'layout style',
         ...style
