@@ -1113,7 +1113,7 @@ footer a {
 @media (max-width: 480px) {
   .container { 
     max-width: 100%; 
-    padding: 0 12px 2px 12px; 
+    padding: 4px 12px 4px 12px; 
     grid-template-rows: auto auto 1fr;
     gap: 0px;
   }
