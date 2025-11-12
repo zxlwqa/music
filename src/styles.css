@@ -76,8 +76,8 @@ select.form-input:focus { border-color: #6b7280; }
   border: 1px solid rgba(255, 255, 255, .45);
   border-radius: 12px;
   height: 100%;
-  min-height: 400px;
-  max-height: calc(100vh - 280px);
+  min-height: 0;
+  max-height: 100%;
   content-visibility: auto;
   contain-intrinsic-size: 600px 450px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
@@ -363,10 +363,9 @@ body {
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 8px 24px 8px 24px;
+  padding: 8px 24px 0 24px;
   contain: layout style;
-  min-height: 100vh;
-  max-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
@@ -928,7 +927,8 @@ input[type="range"] { width: 200px; }
 .actions-inline .download-link[aria-label*="MV"] { font-size: 13px; }
 
 footer {
-  margin-top: 12px;
+  margin-top: 0;
+  margin-bottom: 8px;
   color: var(--sub);
   font-family: inherit;
   contain: layout style;
