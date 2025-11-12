@@ -1165,7 +1165,7 @@ footer a {
     height: 100%;
     min-height: 0;
     max-height: 100%;
-    margin-bottom: 60px;
+    margin-bottom: 0;
     margin-top: 0;
     align-self: start;
   }
