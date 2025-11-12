@@ -273,9 +273,6 @@ export default function App() {
           正在加载播放列表...
         </div>
       </div>
-      <footer style={{ height: '40px', minHeight: '40px' }}>
-        <div style={{ textAlign: 'center' }}></div>
-      </footer>
     </div>
   )
   if (error) return <div className="container error">{error}</div>
@@ -543,15 +540,6 @@ export default function App() {
           />
         </Suspense>
       )}
-      <footer style={{ 
-        marginBottom: (typeof window !== 'undefined' && window.innerWidth <= 480) ? 0 : '0.25rem', 
-        marginTop: (typeof window !== 'undefined' && window.innerWidth <= 480) ? 0 : undefined, 
-        paddingBottom: (typeof window !== 'undefined' && window.innerWidth <= 480) ? 0 : undefined,
-        minHeight: '40px',
-        contain: 'layout style'
-      }}>
-        <div style={{ textAlign: 'center' }}></div>
-      </footer>
       </div>
       
       <ErrorNotificationContainer />
