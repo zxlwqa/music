@@ -1,4 +1,4 @@
-name: 上传音乐到云盘（文件逐一去重）
+name: 上传音乐到云盘
 
 on:
   workflow_dispatch:
