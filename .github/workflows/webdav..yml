@@ -1,8 +1,8 @@
 name: 上传音乐到云盘
-
 on:
   workflow_dispatch:
   schedule:
+    # 每周日凌晨 2 点运行
     - cron: '0 2 * * 0'
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
       - name: 安装工具
         run: |
           sudo apt-get update
-          sudo apt-get install -y zip unzip md5sum curl
+          sudo apt-get install -y zip unzip curl
           curl https://rclone.org/install.sh | sudo bash
 
       - name: 配置WebDAV
@@ -44,17 +44,19 @@ jobs:
 
             rclone ls "$UPLOAD_PATH/$filename" >/dev/null 2>&1
             if [ $? -eq 0 ]; then
+              echo "☁️ 云端已存在同名文件，下载进行对比"
+
               rclone copy "$UPLOAD_PATH/$filename" "/tmp/$filename"
               remote_md5=$(md5sum "/tmp/$filename" | awk '{print $1}')
               
               if [ "$local_md5" == "$remote_md5" ]; then
-                echo "✅ 文件一致 → 跳过上传: $filename"
+                echo "✅ 内容一致 → 跳过上传"
                 continue
               else
-                echo "⚠️ 同名文件但内容不同 → 重新上传: $filename"
+                echo "⚠️ 同名但不同内容 → 重新上传"
               fi
             else
-              echo "🆕 云盘不存在该文件 → 上传: $filename"
+              echo "🆕 云端不存在该文件 → 上传"
             fi
 
             rclone copy "$file" "$UPLOAD_PATH" --progress
