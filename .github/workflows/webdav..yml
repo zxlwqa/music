@@ -3,7 +3,6 @@ name: 上传音乐到云盘
 on:
   workflow_dispatch:
   schedule:
-    # 每周日凌晨 2 点运行
     - cron: '0 2 * * 0'
 
 permissions:
@@ -33,6 +32,7 @@ jobs:
 
       - name: 逐一检测并上传文件
         run: |
+          set -e
           UPLOAD_PATH="webdav:/music"
           rclone mkdir "$UPLOAD_PATH" || true
 
@@ -43,13 +43,14 @@ jobs:
 
             local_md5=$(md5sum "$file" | awk '{print $1}')
 
-            rclone ls "$UPLOAD_PATH/$filename" >/dev/null 2>&1
-            if [ $? -eq 0 ]; then
+            if rclone ls "$UPLOAD_PATH/$filename" >/dev/null 2>&1; then
               echo "☁️ 云端有同名文件 → 进行MD5对比"
 
               tmp_file="/tmp/remote_file"
               rm -f "$tmp_file"
-              rclone copy "$UPLOAD_PATH/$filename" "$tmp_file"
+
+              # 正确下载为文件
+              rclone cat "$UPLOAD_PATH/$filename" > "$tmp_file"
               
               remote_md5=$(md5sum "$tmp_file" | awk '{print $1}')
               rm -f "$tmp_file"
