@@ -1,4 +1,5 @@
 name: 上传音乐到云盘
+
 on:
   workflow_dispatch:
   schedule:
@@ -44,19 +45,26 @@ jobs:
 
             rclone ls "$UPLOAD_PATH/$filename" >/dev/null 2>&1
             if [ $? -eq 0 ]; then
-              echo "☁️ 云端已存在同名文件，下载进行对比"
+              echo "☁️ 云端有同名文件 → 进行MD5对比"
 
-              rclone copy "$UPLOAD_PATH/$filename" "/tmp/$filename"
-              remote_md5=$(md5sum "/tmp/$filename" | awk '{print $1}')
+              tmp_file="/tmp/remote_file"
+              rm -f "$tmp_file"
+              rclone copy "$UPLOAD_PATH/$filename" "$tmp_file"
+              
+              remote_md5=$(md5sum "$tmp_file" | awk '{print $1}')
+              rm -f "$tmp_file"
+
+              echo "本地MD5:  $local_md5"
+              echo "云端MD5:  $remote_md5"
               
               if [ "$local_md5" == "$remote_md5" ]; then
-                echo "✅ 内容一致 → 跳过上传"
+                echo "✅ 内容完全一致 → 跳过上传"
                 continue
               else
-                echo "⚠️ 同名但不同内容 → 重新上传"
+                echo "⚠️ 内容不同 → 执行重新上传"
               fi
             else
-              echo "🆕 云端不存在该文件 → 上传"
+              echo "🆕 云端不存在该文件 → 执行上传"
             fi
 
             rclone copy "$file" "$UPLOAD_PATH" --progress
